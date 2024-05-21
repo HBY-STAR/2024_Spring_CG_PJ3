@@ -3,7 +3,7 @@
 
 window.onload = () => {
   let canvas = document.getElementById('webgl');
-  let positon_text = document.getElementById('position');
+  let position_text = document.getElementById('position');
   let lookat_text = document.getElementById('lookat');
   canvas.setAttribute("width", 500);
   canvas.setAttribute("height", 500);
@@ -15,13 +15,13 @@ window.onload = () => {
   }
 
   // Load a new scene
-  new SceneLoader(gl, positon_text, lookat_text).init();
+  new SceneLoader(gl, position_text, lookat_text).init();
 };
 
 class SceneLoader {
-  constructor(gl, positon_text, lookat_text) {
+  constructor(gl, position_text, lookat_text) {
     this.gl = gl;
-    this.position_text = positon_text;
+    this.position_text = position_text;
     this.lookat_text = lookat_text;
     this.loaders = [];
     this.keyboardController = new KeyboardController();
