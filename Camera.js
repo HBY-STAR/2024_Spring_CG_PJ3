@@ -16,7 +16,7 @@ class Camera {
 
   static getMatrix() {
     return new Matrix4()
-        .ortho(-20.0, 20.0, -20.0, 20.0, -10.0, 200.0)
+        .perspective(Camera.fov, 1, Camera.near, Camera.far)
         .lookAt(Camera.eye.elements[0], Camera.eye.elements[1], Camera.eye.elements[2],
             Camera.at.elements[0], Camera.at.elements[1], Camera.at.elements[2],
             Camera.up.elements[0], Camera.up.elements[1], Camera.up.elements[2]);
