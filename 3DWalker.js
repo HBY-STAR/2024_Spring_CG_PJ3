@@ -106,6 +106,12 @@ class SceneLoader {
     }).init();
     this.loaders.push(boxLoader);
 
+    // load cube
+    let cubeLoader = new CubeLoader(cubeRes, {
+      'gl': this.gl,
+    }).init()
+    this.loaders.push(cubeLoader)
+
         // Load objects
     for (let o of ObjectList) {
       let loader = new ObjectLoader(o, {'gl': this.gl}).init();
