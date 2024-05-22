@@ -103,7 +103,7 @@ class TextureLoader {
 
     // Load texture image
     this.textureImage = new Image();
-    this.textureImage.src = './image/sky.jpg';
+    this.textureImage.src = this.entity.texImagePath
     this.textureImage.onload = ()=> {
       this.handleTextureLoad();
     };
