@@ -5,7 +5,8 @@ class Camera {
     Camera.state = {
       posUp: 0, posDown: 0, posLeft: 0, posRight: 0,
       rotUp: 0, rotDown: 0, rotLeft: 0, rotRight: 0,
-    };
+      light: 0,
+    }
     Camera.at = new Vector3(CameraPara.at);
     Camera.eye = new Vector3(CameraPara.eye);
     Camera.up = new Vector3(CameraPara.up);
@@ -47,5 +48,9 @@ class Camera {
     Camera.up = VectorCross(w, v).normalize();
     position_text.innerHTML = 'position:<b> (' + Camera.eye.elements[0].toFixed(1) + ',' +  Camera.eye.elements[1].toFixed(1) + ',' +  Camera.eye.elements[2].toFixed(1) +')</b>';
     lookat_text.innerHTML = 'look at:<b>(' + Camera.at.elements[0].toFixed(1) + ',' +  Camera.at.elements[1].toFixed(1) + ',' +  Camera.at.elements[2].toFixed(1) +')</b>';
+  }
+
+  static light() {
+    return Camera.state.light;
   }
 }
