@@ -111,6 +111,12 @@ class CubeLoader {
     render() {
         this.gl.useProgram(this.program);
 
+        let lightDirection = new Vector3(sceneDirectionLight);
+        let ambientLight = new Vector3(sceneAmbientLight);
+        lightDirection.normalize();
+        this.gl.uniform3fv(this.u_LightDirection, lightDirection.elements);
+        this.gl.uniform3fv(this.u_AmbientLight, ambientLight.elements);
+
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.entity.vertex), this.gl.STATIC_DRAW);
         this.gl.vertexAttribPointer(this.a_Position, 3, this.gl.FLOAT, false,  6 * Float32Array.BYTES_PER_ELEMENT, 0);

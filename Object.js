@@ -151,10 +151,11 @@ class ObjectLoader {
       this.initPerspective();
     }
 
-    let lightDirection = new Vector3([0.15, 0.15, 0.17]);
+    let lightDirection = new Vector3(sceneDirectionLight);
+    let ambientLight = new Vector3(sceneAmbientLight);
     lightDirection.normalize();
     this.gl.uniform3fv(this.u_LightDirection, lightDirection.elements);
-    this.gl.uniform3fv(this.u_AmbientLight, new Vector3([1.2, 1.2, 1.2]).elements);
+    this.gl.uniform3fv(this.u_AmbientLight, ambientLight.elements);
 
     this.gl.uniform3fv(this.u_Color, new Vector3(this.entity.color).elements);
 
