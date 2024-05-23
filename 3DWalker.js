@@ -72,22 +72,15 @@ class SceneLoader {
         cameraMap.set('f', 'light');
 
         cameraMap.forEach((val, key) => {
-                if (key === 'f') {
-                    this.keyboardController.bind(key, {
-                        on: (() => {
-                            Camera.state[val] = Camera.state[val] ? 0 : 1;
-                        }),
-                    });
-                } else {
-                    this.keyboardController.bind(key, {
-                        on: (() => {
-                            Camera.state[val] = 1;
-                        }),
-                        off: (() => {
-                            Camera.state[val] = 0;
-                        })
-                    });
-                }
+                this.keyboardController.bind(key, {
+                    on: (() => {
+                        Camera.state[val] = 1;
+                    }),
+                    off: (() => {
+                        Camera.state[val] = 0;
+                    })
+                });
+
             }
         )
 
