@@ -25,7 +25,7 @@ class Camera {
   static move(x, y , position_text,lookat_text) {
     let v = VectorMinus(Camera.eye, Camera.at).normalize();
     let w = VectorCross(v, Camera.up);
-    console.log(v + '-----' + w);
+
     v = VectorMultNum(v, x);
     w = VectorMultNum(w, y);
     v = VectorAdd(v, w);
@@ -34,11 +34,10 @@ class Camera {
     position_text.innerHTML = 'position:<b> (' + Camera.eye.elements[0].toFixed(1) + ',' +  Camera.eye.elements[1].toFixed(1) + ',' +  Camera.eye.elements[2].toFixed(1) +')</b>';
     lookat_text.innerHTML = 'look at:<b>(' + Camera.at.elements[0].toFixed(1) + ',' +  Camera.at.elements[1].toFixed(1) + ',' +  Camera.at.elements[2].toFixed(1) +')</b>';
   }
-
   static rotate(x, y, position_text,lookat_text) {
-    let v = VectorMinus(Camera.at, Camera.eye);
+    let v = VectorMinus(Camera.at, Camera.eye); // 获取相机的视线方向向量
+    let w = VectorCross(v, Camera.up); // 获取相机的右方向
 
-    let w = VectorCross(v, Camera.up);
     let up1 = VectorMultNum(Camera.up, -x);
     Camera.at = VectorMinus(Camera.at, up1);
     let right1 = VectorMultNum(w, y)

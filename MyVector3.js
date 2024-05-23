@@ -1,4 +1,10 @@
-
+/**
+ * a + b
+ * @param a
+ * @param b
+ * @returns {Vector3}
+ * @constructor
+ */
 function VectorAdd(a,b){
 	var v = new Vector3();
 	v.elements[0] = a.elements[0] + b.elements[0];
@@ -6,6 +12,14 @@ function VectorAdd(a,b){
 	v.elements[2] = a.elements[2] + b.elements[2];
 	return v;
 }
+
+/**
+ * a - b
+ * @param a
+ * @param b
+ * @returns {Vector3}
+ * @constructor
+ */
 function VectorMinus(a,b){
 	var v = new Vector3();
 	v.elements[0] = a.elements[0] - b.elements[0];
@@ -13,6 +27,13 @@ function VectorMinus(a,b){
 	v.elements[2] = a.elements[2] - b.elements[2];
 	return v;
 }
+
+/**
+ * -b
+ * @param b
+ * @returns {Vector3}
+ * @constructor
+ */
 function VectorReverse(b){
 	var v = new Vector3();
 	v.elements[0] = - b.elements[0];
@@ -20,6 +41,13 @@ function VectorReverse(b){
 	v.elements[2] = - b.elements[2];
 	return v;
 }
+
+/**
+ * b
+ * @param b
+ * @returns {Vector3}
+ * @constructor
+ */
 function VectorCopy(b){
 	var v = new Vector3();
 	v.elements[0] = b.elements[0];
@@ -27,14 +55,37 @@ function VectorCopy(b){
 	v.elements[2] = b.elements[2];
 	return v;
 }
+
+/**
+ * b离原点的距离
+ * @param b
+ * @returns {number}
+ * @constructor
+ */
 function VectorLength(b){
 
 	var c = b.elements[0], d = b.elements[1], e = b.elements[2];
 	return Math.sqrt(c*c+d*d+e*e);
 }
+
+/**
+ * a * b(点乘)
+ * @param a
+ * @param b
+ * @returns {number}
+ * @constructor
+ */
 function VectorDot(a,b){
 	return a.elements[0] * b.elements[0] + a.elements[1] * b.elements[1] + a.elements[2] * b.elements[2];
 }
+
+/**
+ * a * n(const)
+ * @param a
+ * @param n
+ * @returns {Vector3}
+ * @constructor
+ */
 function VectorMultNum(a,n){
 	var v = new Vector3();
 	v.elements[0] = a.elements[0] *n;
@@ -42,6 +93,14 @@ function VectorMultNum(a,n){
 	v.elements[2] = a.elements[2] *n;
 	return v;
 }
+
+/**
+ * a * b(外积)
+ * @param a
+ * @param b
+ * @returns {Vector3}
+ * @constructor
+ */
 function VectorCross(a,b){
 	var v = new Vector3();
 	var x1 =a.elements[0];

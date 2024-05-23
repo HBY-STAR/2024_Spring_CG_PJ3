@@ -60,8 +60,13 @@ class SceneLoader {
   initKeyController() {
     Camera.init();
     let cameraMap = new Map();
+    cameraMap.set('w', 'posUp');
+    cameraMap.set('s', 'posDown');
     cameraMap.set('a', 'posLeft');
     cameraMap.set('d', 'posRight');
+
+    cameraMap.set('i', 'rotUp');
+    cameraMap.set('k', 'rotDown');
     cameraMap.set('j', 'rotLeft');
     cameraMap.set('l', 'rotRight');
 
@@ -83,10 +88,14 @@ class SceneLoader {
     this.keyboardController.last = timestamp;
 
     let posY = (Camera.state.posRight - Camera.state.posLeft) * MOVE_VELOCITY * elapsed / 1000;
+    let posZ = (Camera.state.posUp - Camera.state.posDown) * MOVE_VELOCITY * elapsed / 1000;
     let rotY = (Camera.state.rotRight - Camera.state.rotLeft) * ROT_VELOCITY * elapsed / 1000 / 180 * Math.PI;
+    let rotZ = (Camera.state.rotUp - Camera.state.rotDown) * ROT_VELOCITY * elapsed / 1000 / 180 * Math.PI;
 
     if (posY) Camera.move(0, posY, this.position_text, this.lookat_text);
     if (rotY) Camera.rotate(0, rotY, this.position_text, this.lookat_text);
+    if (posZ) Camera.move(posZ, 0, this.position_text, this.lookat_text);
+    if (rotZ) Camera.rotate( rotZ, 0, this.position_text, this.lookat_text);
   }
 
   initLoaders() {
