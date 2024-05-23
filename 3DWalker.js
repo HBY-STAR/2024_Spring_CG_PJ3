@@ -24,6 +24,17 @@ class SceneLoader {
         this.lookat_text = lookat_text;
         this.loaders = [];
         this.keyboardController = new KeyboardController();
+
+        // bird anim
+        this.ANGLE_STEP = 45.0;      // 旋转速度
+        this.currentAngle = 0.0;     // 当前旋转角度
+        this.UP_DOWN_STEP = 5;       // 上下平移速度
+        this.UP_MAX = 10;            // 上限
+        this.DOWN_MAX = -10;         // 下限
+        this.currentPosition = 0;    // 当前上下位置
+        this.currentDirection = 1;   // 当前上下方向
+        this.lastRender = 0;         // 上次渲染时间
+        this.centerPosition = ObjectList[5].transform.translate // 环绕中心
     }
 
     init() {
@@ -38,7 +49,11 @@ class SceneLoader {
             this.initCamera(timestamp);
 
             for (let loader of this.loaders) {
-                loader.render(timestamp);
+                if(loader.entity.objFilePath.indexOf('bird') > 0){
+                    this.bird_animate(timestamp, loader)
+                }else{
+                    loader.render(timestamp);
+                }
             }
 
             requestAnimationFrame(render, this.gl);
@@ -128,11 +143,24 @@ class SceneLoader {
         // Load objects
         for (let o of ObjectList) {
             let loader = new ObjectLoader(o, {'gl': this.gl}).init();
-            // Add animation to bird
-            // if (o.objFilePath.indexOf('bird') > 0) {
-            //   continue;
-            // }
             this.loaders.push(loader);
         }
+
+        this.lastRender = Date.now();
+    }
+
+    bird_animate(timestamp, loader){
+        let elapsed = timestamp - this.lastRender;
+        this.lastRender = timestamp;
+
+        this.currentAngle += (this.ANGLE_STEP * elapsed) / 1000.0;
+        this.currentAngle = this.currentAngle % 360;
+        this.currentPosition += (this.UP_DOWN_STEP * elapsed) / 1000.0 * this.currentDirection;
+        if(this.currentPosition > this.UP_MAX || this.currentPosition < this.DOWN_MAX){
+            this.currentDirection *= -1;
+        }
+
+
+
     }
 }

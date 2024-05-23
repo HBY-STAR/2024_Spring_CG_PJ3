@@ -121,7 +121,7 @@ CameraPara = {
   near: 0.1,
   far: 400,
   eye: [0.0, 5.0, 48.0],
-  at: [0.0, 5.0, 43.0],
+  at: [0.0, 4.8, 43.0],
   up: [0.0, 1.0, 0.0],
 }
 
@@ -156,7 +156,7 @@ ObjectList = [
     color: [0.5, 0.9, 0.5],
     kads: [0.2, 0.8, 0.5],
     transform: [
-      {type: "translate", content: [0, 5, -10]},
+      {type: "translate", content: [5, 5, -10]},
       {type: "rotate", content: [0, 0, 1, 0]},
       {type: "translate", content: [0, 0, 5]},
       {type: "scale", content: [5, 5, 5]}
