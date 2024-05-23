@@ -168,7 +168,8 @@ class ObjectLoader {
     this.gl.uniform3fv(this.u_AmbientLight, ambientLight.elements);
 
     // point light
-    let pointLightPosition = new Vector3(CameraPara.eye);
+    let pointLightPosition = Camera.eye;
+    // let pointLightPosition = new Vector3(CameraPara.eye);
     let pointLightColor = new Vector3(scenePointLightColor);
     this.gl.uniform3fv(this.u_PointLightPosition, pointLightPosition.elements);
     this.gl.uniform3fv(this.u_PointLightColor, pointLightColor.elements);

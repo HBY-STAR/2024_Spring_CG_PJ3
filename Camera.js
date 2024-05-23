@@ -50,7 +50,7 @@ class Camera {
     lookat_text.innerHTML = 'look at:<b>(' + Camera.at.elements[0].toFixed(1) + ',' +  Camera.at.elements[1].toFixed(1) + ',' +  Camera.at.elements[2].toFixed(1) +')</b>';
   }
 
-  static light() {
-    return Camera.state.light;
+  static getEye(){
+    return Camera.eye;
   }
 }
