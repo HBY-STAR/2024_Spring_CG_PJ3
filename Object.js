@@ -250,9 +250,11 @@ class ObjectLoader {
 
         this.currentPosition += (this.UP_DOWN_STEP * elapsed) / 1000.0 * this.currentDirection;
         if (this.currentPosition > this.UP_MAX) {
+            this.currentPosition = this.UP_MAX;
             this.currentDirection = -1;
         }
         else if(this.currentPosition < this.DOWN_MAX){
+            this.currentPosition = this.DOWN_MAX;
             this.currentDirection = 1;
         }
 
