@@ -34,10 +34,10 @@ class ObjectLoader {
 
     initBirdAnim(){
         // bird anim
-        this.ANGLE_STEP = 180;      // 旋转速度
+        this.ANGLE_STEP = 240;      // 旋转速度
         this.currentAngle = 0.0;     // 当前旋转角度
         this.UP_DOWN_STEP = 0.5;       // 上下平移速度
-        this.UP_MAX = 0.5;            // 上下平移上限
+        this.UP_MAX = 1;            // 上下平移上限
         this.DOWN_MAX = -0.5;         // 上下平移下限
         this.currentPosition = 0.0;    // 当前上下位置
         this.currentDirection = 1.0;   // 当前上下方向
@@ -176,13 +176,6 @@ class ObjectLoader {
         if (this.nextFrame != null) {
             this.g_modelMatrix = this.bird_animate(timestamp, this.g_modelMatrix);
             // console.log(this.g_modelMatrix.elements)
-
-            // if (this.first) {
-            //     console.log(this.g_modelMatrix.elements)
-            //     this.g_modelMatrix = this.nextFrame(timestamp, this.g_modelMatrix);
-            //     console.log(this.g_modelMatrix.elements)
-            // }
-            // this.first = false
         }
 
 
@@ -257,9 +250,14 @@ class ObjectLoader {
         this.currentAngle = this.currentAngle % 360;
 
         this.currentPosition += (this.UP_DOWN_STEP * elapsed) / 1000.0 * this.currentDirection;
-        if (this.currentPosition > this.UP_MAX || this.currentPosition < this.DOWN_MAX) {
-            this.currentDirection *= -1;
+        if (this.currentPosition > this.UP_MAX) {
+            this.currentDirection = -1;
         }
+        else if(this.currentPosition < this.DOWN_MAX){
+            this.currentDirection = 1;
+        }
+
+        //console.log(this.currentPosition)
 
         // Translate the model matrix to the center position
         model_matrix.translate(this.centerPosition[0], this.centerPosition[1], this.centerPosition[2]);
