@@ -173,9 +173,8 @@ class ObjectLoader {
 
         this.initPerspective();
 
-        if (this.nextFrame != null) {
+        if (this.nextFrame === 'bird anim') {
             this.g_modelMatrix = this.bird_animate(timestamp, this.g_modelMatrix);
-            // console.log(this.g_modelMatrix.elements)
         }
 
 
@@ -256,8 +255,6 @@ class ObjectLoader {
         else if(this.currentPosition < this.DOWN_MAX){
             this.currentDirection = 1;
         }
-
-        //console.log(this.currentPosition)
 
         // Translate the model matrix to the center position
         model_matrix.translate(this.centerPosition[0], this.centerPosition[1], this.centerPosition[2]);
