@@ -23,6 +23,13 @@ class Camera {
             Camera.up.elements[0], Camera.up.elements[1], Camera.up.elements[2]);
   }
 
+  static getViewMatrix() {
+    return new Matrix4()
+        .lookAt(Camera.eye.elements[0], Camera.eye.elements[1], Camera.eye.elements[2],
+            Camera.at.elements[0], Camera.at.elements[1], Camera.at.elements[2],
+            Camera.up.elements[0], Camera.up.elements[1], Camera.up.elements[2]);
+  }
+
   static move(x, y , position_text,lookat_text) {
     let v = VectorMinus(Camera.eye, Camera.at).normalize();
     let w = VectorCross(v, Camera.up);

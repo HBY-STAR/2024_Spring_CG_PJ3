@@ -78,6 +78,9 @@ class SceneLoader {
                         on: (() => {
                             Camera.state[val] = Camera.state[val] === 0 ? 1 : 0;
                         }),
+                        off: (() => {
+
+                        })
                     });
                 } else {
                     this.keyboardController.bind(key, {
