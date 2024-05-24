@@ -29,20 +29,9 @@ class CubeLoader {
         uniform mat4 u_NormalMatrix;
         varying vec4 v_Color;
         uniform vec3 u_Color;
-        uniform vec3 u_LightDirection;
-        uniform vec3 u_AmbientLight;
+
         void main() {
           gl_Position = u_MvpMatrix * a_Position;
-
-          vec4 normal1 = u_NormalMatrix * a_Normal;
-
-          vec3 normal = normalize(normal1.xyz);
-
-          float nDotL = max(dot(u_LightDirection, normal), 0.0);
-          vec3 u_DiffuseLight = vec3(1.0, 1.0, 1.0);
-          vec3 diffuse = u_DiffuseLight * u_Color * nDotL;
-          vec3 ambient = u_AmbientLight * u_Color;
-
           v_Color = a_Color;
         }`;
 
@@ -65,7 +54,6 @@ class CubeLoader {
 
         this.gl.enable(this.gl.DEPTH_TEST);
 
-        // Get the storage locations of attribute and uniform variables
         this.a_Position = this.gl.getAttribLocation(this.program, 'a_Position');
         this.a_Color = this.gl.getAttribLocation(this.program, 'a_Color');
         this.a_Normal = this.gl.getAttribLocation(this.program, 'a_Normal');
@@ -73,10 +61,6 @@ class CubeLoader {
         this.u_NormalMatrix = this.gl.getUniformLocation(this.program, 'u_NormalMatrix');
         this.u_ModelMatrix = this.gl.getUniformLocation(this.program, 'u_ModelMatrix');
 
-
-        this.u_LightDirection = this.gl.getUniformLocation(this.program, 'u_LightDirection');
-        this.u_AmbientLight = this.gl.getUniformLocation(this.program, 'u_AmbientLight');
-        this.u_Color = this.gl.getUniformLocation(this.program, 'u_Color');
 
         this.gl.useProgram(this.program);
         this.gl.program = this.program;
@@ -110,12 +94,6 @@ class CubeLoader {
 
     render() {
         this.gl.useProgram(this.program);
-
-        // let lightDirection = new Vector3(sceneDirectionLight);
-        // let ambientLight = new Vector3(sceneAmbientLight);
-        // lightDirection.normalize();
-        // this.gl.uniform3fv(this.u_LightDirection, lightDirection.elements);
-        // this.gl.uniform3fv(this.u_AmbientLight, ambientLight.elements);
 
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.entity.vertex), this.gl.STATIC_DRAW);
