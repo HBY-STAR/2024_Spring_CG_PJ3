@@ -5,7 +5,7 @@ class Camera {
     Camera.state = {
       posUp: 0, posDown: 0, posLeft: 0, posRight: 0,
       rotUp: 0, rotDown: 0, rotLeft: 0, rotRight: 0,
-      light: 0,
+      light: 0, fog: 0,
     }
     Camera.at = new Vector3(CameraPara.at);
     Camera.eye = new Vector3(CameraPara.eye);

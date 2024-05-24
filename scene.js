@@ -212,3 +212,7 @@ var sceneDirectionLight = [0.35, 0.35, 0.87];
 //点光源的颜色，点光源的位置应当实时与相机位置（eye）相同
 var scenePointLightColor = [0.5, 0.5, 0.6];
 
+// More Effect
+// fog
+let fogColor = [1,1,1];
+let fogDist = [CameraPara.near,CameraPara.far/3];

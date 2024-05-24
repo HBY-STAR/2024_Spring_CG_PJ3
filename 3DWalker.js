@@ -70,21 +70,27 @@ class SceneLoader {
         cameraMap.set('l', 'rotRight');
 
         cameraMap.set('f', 'light');
+        cameraMap.set('r', 'fog');
 
         cameraMap.forEach((val, key) => {
-                this.keyboardController.bind(key, {
-                    on: (() => {
-                        Camera.state[val] = 1;
-                    }),
-                    off: (() => {
-                        Camera.state[val] = 0;
-                    })
-                });
-
+                if (key === 'r') {
+                    this.keyboardController.bind(key, {
+                        on: (() => {
+                            Camera.state[val] = Camera.state[val] === 0 ? 1 : 0;
+                        }),
+                    });
+                } else {
+                    this.keyboardController.bind(key, {
+                        on: (() => {
+                            Camera.state[val] = 1;
+                        }),
+                        off: (() => {
+                            Camera.state[val] = 0;
+                        })
+                    });
+                }
             }
         )
-
-
     }
 
     initCamera(timestamp) {

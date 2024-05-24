@@ -56,6 +56,7 @@ class ObjectLoader {
         uniform mat4 u_ModelMatrix;
         uniform mat4 u_NormalMatrix;
         varying vec4 v_Color;
+        varying float v_Dist;
         uniform vec3 u_Color;
         uniform vec3 u_PointLightPosition;
         uniform vec3 u_PointLightColor;
@@ -80,6 +81,7 @@ class ObjectLoader {
           vec3 ambient = u_AmbientLight * u_Color;
 
           v_Color = vec4(diffuse + ambient + pointDiffuse, a_Color.a);
+          v_Dist = distance(u_ModelMatrix * a_Position, vec4(u_PointLightPosition, 1.0));
         }`;
 
         // Fragment shader program
@@ -87,9 +89,14 @@ class ObjectLoader {
         #ifdef GL_ES
         precision mediump float;
         #endif
+        uniform vec3 u_FogColor;
+        uniform vec2 u_FogDist;
         varying vec4 v_Color;
+        varying float v_Dist;
         void main() {
-          gl_FragColor = v_Color;
+          float fogFactor = clamp((u_FogDist.y - v_Dist) / (u_FogDist.y - u_FogDist.x), 0.0, 1.0);
+          vec3 color = mix(u_FogColor, vec3(v_Color), fogFactor);
+          gl_FragColor = vec4(color, v_Color.a);
         }`;
 
         // Initialize shaders
@@ -109,11 +116,18 @@ class ObjectLoader {
         this.u_NormalMatrix = this.gl.getUniformLocation(this.program, 'u_NormalMatrix');
         this.u_ModelMatrix = this.gl.getUniformLocation(this.program, 'u_ModelMatrix');
 
+        // point light
         this.u_PointLightPosition = this.gl.getUniformLocation(this.program, 'u_PointLightPosition');
         this.u_PointLightColor = this.gl.getUniformLocation(this.program, 'u_PointLightColor');
+
+        // parallel light and ambient light
         this.u_LightDirection = this.gl.getUniformLocation(this.program, 'u_LightDirection');
         this.u_AmbientLight = this.gl.getUniformLocation(this.program, 'u_AmbientLight');
         this.u_Color = this.gl.getUniformLocation(this.program, 'u_Color');
+
+        // fog
+        this.u_FogColor = this.gl.getUniformLocation(this.program, 'u_FogColor');
+        this.u_FogDist = this.gl.getUniformLocation(this.program, 'u_FogDist');
 
         this.gl.useProgram(this.program);
         this.gl.program = this.program;
@@ -196,6 +210,15 @@ class ObjectLoader {
         this.gl.uniform3fv(this.u_PointLightPosition, pointLightPosition.elements);
         this.gl.uniform3fv(this.u_PointLightColor, pointLightColor.elements);
         this.gl.uniform3fv(this.u_Color, new Vector3(this.entity.color).elements);
+
+        // fog
+        if(Camera.state.fog){
+            this.gl.uniform3fv(this.u_FogColor, fogColor);
+            this.gl.uniform2fv(this.u_FogDist, fogDist);
+        }else{
+            this.gl.uniform3fv(this.u_FogColor, [1,1,1]);
+            this.gl.uniform2fv(this.u_FogDist, [CameraPara.far, CameraPara.far+1]);
+        }
 
         this.g_normalMatrix.setInverseOf(this.g_modelMatrix);
         this.g_normalMatrix.transpose();
