@@ -1,5 +1,7 @@
 "use strict";
 
+let usePhongShading = true;
+
 window.onload = () => {
     let canvas = document.getElementById('webgl');
     let position_text = document.getElementById('position');
@@ -138,9 +140,15 @@ class SceneLoader {
         for (let o of ObjectList) {
             let loader;
             if (o.objFilePath === './model/bird.obj') {
-                loader = new ObjectLoaderPhong(o, {'gl': this.gl}, 'bird anim').init();
+                if(usePhongShading)
+                    loader = new ObjectLoaderPhong(o, {'gl': this.gl}, 'bird anim').init();
+                else
+                    loader = new ObjectLoader(o, {'gl': this.gl}, 'bird anim').init();
             } else {
-                loader = new ObjectLoaderPhong(o, {'gl': this.gl}, null).init();
+                if(usePhongShading)
+                    loader = new ObjectLoaderPhong(o, {'gl': this.gl}, null).init();
+                else
+                    loader = new ObjectLoader(o, {'gl': this.gl}, null).init();
             }
             this.loaders.push(loader);
         }
