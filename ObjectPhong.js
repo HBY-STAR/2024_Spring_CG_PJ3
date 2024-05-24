@@ -102,7 +102,7 @@ class ObjectLoaderPhong {
         
         void main() {
             // Normalize interpolated normal
-            vec3 N = normalize(v_Normal);
+            vec3 N = v_Normal;
         
             // Calculate light direction for point light
             vec3 L = v_pointLightDirection;
@@ -111,10 +111,10 @@ class ObjectLoaderPhong {
             float lambertian = max(dot(N, L), 0.0);
             vec3 u_DiffuseLight = vec3(1.0, 1.0, 1.0);
             vec3 diffuse = u_DiffuseLight * u_Color.rgb * lambertian;
-        
+                    
             vec3 V = normalize(-v_Position);
             vec3 R = reflect(-L, N);
-            float specularStrength = pow(max(dot(V, R), 0.0), 60.0);
+            float specularStrength = pow(max(dot(R, V), 0.0), 80.0);
             vec3 specular = u_PointLightColor * specularStrength;
         
             // Increase ambient light intensity
@@ -233,13 +233,17 @@ class ObjectLoaderPhong {
         this.gl.uniform3fv(this.u_AmbientLight, ambientLight.elements);
 
         // point light
-        let pointLightPosition = new Vector3(Camera.eye.elements);
+        let pointLightPosition;
         // let pointLightPosition = new Vector3(CameraPara.eye);
         let pointLightColor;
-        if (Camera.state.light)
+        if (Camera.state.light) {
+            pointLightPosition = new Vector3(Camera.eye.elements)
             pointLightColor = new Vector3(scenePointLightColor);
-        else
+        }
+        else{
+            pointLightPosition = new Vector3([0, 0, 0]);
             pointLightColor = new Vector3([0, 0, 0]);
+        }
         this.gl.uniform3fv(this.u_PointLightPosition, pointLightPosition.elements);
         this.gl.uniform3fv(this.u_PointLightColor, pointLightColor.elements);
         this.gl.uniform3fv(this.u_Color, new Vector3(this.entity.color).elements);
