@@ -138,9 +138,9 @@ class SceneLoader {
         for (let o of ObjectList) {
             let loader;
             if (o.objFilePath === './model/bird.obj') {
-                loader = new ObjectLoader(o, {'gl': this.gl}, 'bird anim').init();
+                loader = new ObjectLoaderPhong(o, {'gl': this.gl}, 'bird anim').init();
             } else {
-                loader = new ObjectLoader(o, {'gl': this.gl}, null).init();
+                loader = new ObjectLoaderPhong(o, {'gl': this.gl}, null).init();
             }
             this.loaders.push(loader);
         }

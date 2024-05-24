@@ -214,5 +214,5 @@ var scenePointLightColor = [0.5, 0.5, 0.6];
 
 // More Effect
 // fog
-let fogColor = [1,1,1];
+let fogColor = [1, 1, 1];
 let fogDist = [CameraPara.near,CameraPara.far/3];

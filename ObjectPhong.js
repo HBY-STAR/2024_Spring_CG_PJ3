@@ -53,6 +53,7 @@ class ObjectLoaderPhong {
         attribute vec4 a_Color;
         attribute vec4 a_Normal;
         
+        uniform vec3 u_PointLightPosition;
         uniform mat4 u_MvpMatrix;
         uniform mat4 u_MvMatrix;
         uniform mat4 u_ModelMatrix;
@@ -61,6 +62,8 @@ class ObjectLoaderPhong {
         varying vec4 v_Color;
         varying vec3 v_Normal;
         varying vec3 v_Position;
+        varying vec3 v_pointLightDirection;
+        varying float v_Dist;
         
         void main() {
             gl_Position = u_MvpMatrix * a_Position;
@@ -69,10 +72,13 @@ class ObjectLoaderPhong {
             v_Normal = normalize(mat3(u_NormalMatrix) * a_Normal.xyz);
         
             // Transform vertex position to world space
-            v_Position = (u_MvMatrix * a_Position).xyz;
+            v_Position = vec3(u_MvMatrix * a_Position);
         
             // Pass color to fragment shader
             v_Color = a_Color;
+            
+            v_pointLightDirection = normalize(u_PointLightPosition - vec3(v_Position));
+            v_Dist = distance(u_ModelMatrix * a_Position, vec4(u_PointLightPosition, 1.0));
         }
         `
         ;
@@ -81,40 +87,47 @@ class ObjectLoaderPhong {
         let FSHADER_SOURCE = `
         precision mediump float;
 
-        uniform vec3 u_PointLightPosition;
         uniform vec3 u_PointLightColor;
         uniform vec3 u_LightDirection;
         uniform vec3 u_AmbientLight;
         uniform vec3 u_Color;
+        uniform vec3 u_FogColor;
+        uniform vec2 u_FogDist;
         
         varying vec4 v_Color;
         varying vec3 v_Normal;
         varying vec3 v_Position;
+        varying vec3 v_pointLightDirection;
+        varying float v_Dist;
         
         void main() {
             // Normalize interpolated normal
-            vec3 normal = normalize(v_Normal);
+            vec3 N = normalize(v_Normal);
         
             // Calculate light direction for point light
-            vec3 pointLightDirection = normalize(u_PointLightPosition - v_Position);
+            vec3 L = v_pointLightDirection;
         
             // Calculate diffuse and specular reflection components
-            float diffuseStrength = max(dot(normal, pointLightDirection), 0.0);
+            float lambertian = max(dot(N, L), 0.0);
             vec3 u_DiffuseLight = vec3(1.0, 1.0, 1.0);
-            vec3 diffuse = u_DiffuseLight * u_Color.rgb * diffuseStrength;
+            vec3 diffuse = u_DiffuseLight * u_Color.rgb * lambertian;
         
-            vec3 viewDirection = normalize(-v_Position);
-            vec3 reflectDirection = reflect(-pointLightDirection, normal);
-            float specularStrength = pow(max(dot(viewDirection, reflectDirection), 0.0), 80.0);
+            vec3 V = normalize(-v_Position);
+            vec3 R = reflect(-L, N);
+            float specularStrength = pow(max(dot(V, R), 0.0), 60.0);
             vec3 specular = u_PointLightColor * specularStrength;
         
             // Increase ambient light intensity
-            vec3 ambient = u_AmbientLight * u_Color.rgb; // Adjust the coefficient
+            vec3 ambient = u_AmbientLight * u_Color.rgb;
         
             // Combine all lighting components
             vec3 lighting = ambient + diffuse + specular;
+            
+            float fogFactor = clamp((u_FogDist.y - v_Dist) / (u_FogDist.y - u_FogDist.x), 0.0, 1.0);
+            vec3 color = mix(u_FogColor, vec3(lighting), fogFactor);
+          
         
-            gl_FragColor = vec4(lighting, v_Color.a);
+            gl_FragColor = vec4(color, 1.0);
         }
         `;
 
@@ -220,7 +233,7 @@ class ObjectLoaderPhong {
         this.gl.uniform3fv(this.u_AmbientLight, ambientLight.elements);
 
         // point light
-        let pointLightPosition = Camera.eye;
+        let pointLightPosition = new Vector3(Camera.eye.elements);
         // let pointLightPosition = new Vector3(CameraPara.eye);
         let pointLightColor;
         if (Camera.state.light)
