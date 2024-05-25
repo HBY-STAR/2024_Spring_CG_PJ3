@@ -1,6 +1,6 @@
 "use strict";
 
-let usePhongShading = true;
+let usePhongShading = false;
 
 window.onload = () => {
     let canvas = document.getElementById('webgl');
