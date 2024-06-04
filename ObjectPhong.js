@@ -77,7 +77,7 @@ class ObjectLoaderPhong {
             // Pass color to fragment shader
             v_Color = a_Color;
             
-            v_pointLightDirection = normalize(u_PointLightPosition - vec3(a_Position));
+            v_pointLightDirection = normalize(u_PointLightPosition - vec3(v_Position));
             v_Dist = distance(u_ModelMatrix * a_Position, vec4(u_PointLightPosition, 1.0));
         }
         `
@@ -120,14 +120,14 @@ class ObjectLoaderPhong {
                     
             vec3 V = normalize(-v_Position);
             vec3 R = reflect(-L, N);
-            float specularStrength = pow(max(dot(R, V), 0.0), 80.0);
+            float specularStrength = pow(max(dot(R, V), 0.0), 120.0);
             vec3 specular = u_PointLightColor * specularStrength;
         
             // Increase ambient light intensity
             vec3 ambient = u_PointLightColor * u_AmbientLight;
         
             // Combine all lighting components
-            vec3 lighting = ambient * 1.0 + diffuse * 1.0 + specular * 1.0;
+            vec3 lighting = ambient * 0.7+ diffuse * 0.7 + specular * 1.2;
             
             float fogFactor = clamp((u_FogDist.y - v_Dist) / (u_FogDist.y - u_FogDist.x), 0.0, 1.0);
             vec3 color = mix(u_FogColor, vec3(lighting), fogFactor);
@@ -213,6 +213,9 @@ class ObjectLoaderPhong {
             return;
         }
         this.g_objDoc = objDoc;
+
+        // Acquire the vertex coordinates and colors from OBJ file
+        this.g_drawingInfo = this.g_objDoc.getDrawingInfoPhong();
     }
 
     render(timestamp) {
@@ -240,7 +243,6 @@ class ObjectLoaderPhong {
 
         // point light
         let pointLightPosition;
-        // let pointLightPosition = new Vector3(CameraPara.eye);
         let pointLightColor;
         if (Camera.state.light) {
             pointLightPosition = new Vector3(Camera.eye.elements)
@@ -281,8 +283,6 @@ class ObjectLoaderPhong {
     }
 
     onReadComplete() {
-        // Acquire the vertex coordinates and colors from OBJ file
-        this.g_drawingInfo = this.g_objDoc.getDrawingInfo();
 
         // Write date into the buffer object
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffers.vertexBuffer);
