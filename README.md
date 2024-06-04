@@ -82,7 +82,7 @@
 
 ## 7. 项目可能存在的问题
 
-* 有些参数是在着色器中硬编码的，比如`DiffuseLight`、`shininessVal`等，因为在 `scene.js` 中并没有提供这些参数。
+* 有些参数是在着色器中硬编码的，比如`ka`、`kd`、`ks`、`shininessVal`等，因为在 `scene.js` 中并没有提供这些参数。
 * 阴影效果暂未实现。
 
 

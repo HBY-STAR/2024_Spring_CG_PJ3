@@ -77,7 +77,7 @@ class ObjectLoaderPhong {
             // Pass color to fragment shader
             v_Color = a_Color;
             
-            v_pointLightDirection = normalize(u_PointLightPosition - vec3(v_Position));
+            v_pointLightDirection = normalize(u_PointLightPosition - vec3(a_Position));
             v_Dist = distance(u_ModelMatrix * a_Position, vec4(u_PointLightPosition, 1.0));
         }
         `
@@ -109,8 +109,14 @@ class ObjectLoaderPhong {
         
             // Calculate diffuse and specular reflection components
             float lambertian = max(dot(N, L), 0.0);
+            if(u_PointLightColor.x == 0.0 && u_PointLightColor.y == 0.0 && u_PointLightColor.z == 0.0){
+                lambertian = 0.0;
+            }
+            
+            float nDotL = max(dot(u_LightDirection, v_Normal), 0.0);
             vec3 u_DiffuseLight = vec3(1.0, 1.0, 1.0);
-            vec3 diffuse = u_DiffuseLight * u_Color.rgb * lambertian;
+            vec3 diffusePara = u_DiffuseLight * u_Color * nDotL;
+            vec3 diffuse = u_Color.rgb * lambertian + diffusePara;
                     
             vec3 V = normalize(-v_Position);
             vec3 R = reflect(-L, N);
@@ -118,10 +124,10 @@ class ObjectLoaderPhong {
             vec3 specular = u_PointLightColor * specularStrength;
         
             // Increase ambient light intensity
-            vec3 ambient = u_AmbientLight * u_Color.rgb;
+            vec3 ambient = u_PointLightColor * u_AmbientLight;
         
             // Combine all lighting components
-            vec3 lighting = ambient + diffuse + specular;
+            vec3 lighting = ambient * 1.0 + diffuse * 1.0 + specular * 1.0;
             
             float fogFactor = clamp((u_FogDist.y - v_Dist) / (u_FogDist.y - u_FogDist.x), 0.0, 1.0);
             vec3 color = mix(u_FogColor, vec3(lighting), fogFactor);
