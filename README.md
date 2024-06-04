@@ -47,6 +47,7 @@
 * 在 `3DWalker.js` 中第三行可以开启 phong shading。默认为关闭状态，如下：
 
     ```js
+    // 注：修改代码后注意浏览器重新停用缓存并刷新界面
     let usePhongShading = false;
     ```
 
